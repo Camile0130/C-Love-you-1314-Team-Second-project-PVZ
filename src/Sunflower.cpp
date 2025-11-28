@@ -6,11 +6,16 @@
 Sunflower::Sunflower(int x, int y)
     : Plant("SUNFLOWER", PlantType::SUNFLOWER, 75, 50),
     sun_production_rate(4.0f),
-    current_sun_cooldown(0.0f)
-{
+    current_sun_cooldown(0.0f) {
+    // 将初始位置写入Transform组件
+    SetPosition(static_cast<float>(x), static_cast<float>(y));
+}
+
 void Sunflower::Update(float dt) {
+    if (is_dead()) return;
+
+    // 累积生产计时器
     current_sun_cooldown += dt;
-        current_sun_cooldown = 0.0f;
 }
 
 // 绘制向日葵（仅用Transform位置 + 自身尺寸）
@@ -51,20 +56,15 @@ void Sunflower::draw() const {
     );
 }
 
-void Sunflower::update() {
-    if (is_dead()) return;
-    if (current_sun_cooldown < sun_production_rate) {
-        current_sun_cooldown++;
-    }
-}
-
 int Sunflower::produce_sunshine() {
+    if (is_dead()) return 0;
+
     if (current_sun_cooldown >= sun_production_rate) {
-        current_sun_cooldown = 0;
+        current_sun_cooldown = 0.0f;
 
         const Transform* trans = GetTransform();
-        float posX = trans ? trans->GetPosition().x : 0;
-        float posY = trans ? trans->GetPosition().y : 0;
+        float posX = trans ? trans->GetPosition().x : 0.0f;
+        float posY = trans ? trans->GetPosition().y : 0.0f;
         std::cout << "Sunflower at (" << posX << "," << posY << ") produced a sun!" << '\n';
 
         return 25;
