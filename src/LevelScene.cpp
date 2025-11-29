@@ -1,7 +1,7 @@
 #include "LevelScene.h"
 #include "Peashooter.h"
 #include "Sunflower.h"
-#include "NormalZombie.h"
+#include "normalzombie.h"
 #include "Transform.h"
 #include <graphics.h>
 #include <windows.h>
@@ -10,43 +10,43 @@
 
 
 LevelScene::LevelScene(std::string name) : Scene(name) {
-    // ³õÊ¼»¯5ĞĞ9ÁĞµØÍ¼Íø¸ñ
+    // åˆå§‹åŒ–5è¡Œ9åˆ—åœ°å›¾ç½‘æ ¼
     grid.resize(MAP_ROWS, std::vector<Grid>(MAP_COLS));
 }
 
-// ³¡¾°½øÈëÊ±³õÊ¼»¯¿¨²ÛºÍµØÍ¼
+// åœºæ™¯è¿›å…¥æ—¶åˆå§‹åŒ–å¡æ§½å’Œåœ°å›¾
 void LevelScene::onEnter() {
-    // ³õÊ¼»¯¿¨²ÛÖ²Îï£¨Íã¶¹ÉäÊÖ¡¢ÏòÈÕ¿û£©
+    // åˆå§‹åŒ–å¡æ§½æ¤ç‰©ï¼ˆè±Œè±†å°„æ‰‹ã€å‘æ—¥è‘µï¼‰
     cards = {
-        {"Íã¶¹ÉäÊÖ", "Peashooter", 100, 5.0f, 0.0f}, // Ãû³Æ¡¢ÀàĞÍ¡¢³É±¾¡¢ÀäÈ´Ê±¼ä¡¢µ±Ç°ÀäÈ´
-        {"ÏòÈÕ¿û", "Sunflower", 50, 10.0f, 0.0f}
+        {"è±Œè±†å°„æ‰‹", "Peashooter", 100, 5.0f, 0.0f}, // åç§°ã€ç±»å‹ã€æˆæœ¬ã€å†·å´æ—¶é—´ã€å½“å‰å†·å´
+        {"å‘æ—¥è‘µ", "Sunflower", 50, 10.0f, 0.0f}
     };
-    selectedCard = ""; // ³õÊ¼Î´Ñ¡ÖĞÈÎºÎ¿¨Æ¬
+    selectedCard = ""; // åˆå§‹æœªé€‰ä¸­ä»»ä½•å¡ç‰‡
 }
 
 void LevelScene::onExit() {
-    objMgr.CleanupDestroyed(); // ÇåÀíËùÓĞ¶ÔÏó
+    objMgr.CleanupDestroyed(); // æ¸…ç†æ‰€æœ‰å¯¹è±¡
 }
 
-// Âß¼­¸üĞÂ£¨º¬¿¨²ÛÀäÈ´£©
+// é€»è¾‘æ›´æ–°ï¼ˆå«å¡æ§½å†·å´ï¼‰
 void LevelScene::eventTick(float dt) {
-    objMgr.UpdateAll(dt); // ¸üĞÂÖ²ÎïºÍ½©Ê¬
+    objMgr.UpdateAll(dt); // æ›´æ–°æ¤ç‰©å’Œåƒµå°¸
 
-    // ½©Ê¬Éú³É£¨Ã¿5ÃëËæ»úÉú³É1¸ö£©
+    // åƒµå°¸ç”Ÿæˆï¼ˆæ¯5ç§’éšæœºç”Ÿæˆ1ä¸ªï¼‰
     zombieSpawnTimer += dt;
     if (zombieSpawnTimer >= 5.0f) {
         SpawnZombie(rand() % MAP_ROWS);
         zombieSpawnTimer = 0;
     }
 
-    // ÏòÈÕ¿û²úÑô¹â
+    // å‘æ—¥è‘µäº§é˜³å…‰
     auto sunflowers = objMgr.GetObjectsByType("SUNFLOWER");
     for (Object* obj : sunflowers) {
         Sunflower* sun = dynamic_cast<Sunflower*>(obj);
         if (sun) AddSunshine(sun->produce_sunshine());
     }
 
-    // ¿¨²ÛÀäÈ´¸üĞÂ
+    // å¡æ§½å†·å´æ›´æ–°
     for (auto& card : cards) {
         if (card.currentCd > 0) {
             card.currentCd = (card.currentCd - dt) > 0.0f ? (card.currentCd - dt) : 0.0f;
@@ -54,14 +54,14 @@ void LevelScene::eventTick(float dt) {
     }
 }
 
-// »æÖÆµØÍ¼¡¢¿¨²Û¡¢Ö²Îï¡¢½©Ê¬
+// ç»˜åˆ¶åœ°å›¾ã€å¡æ§½ã€æ¤ç‰©ã€åƒµå°¸
 void LevelScene::drawTick() {
-    // 1. »æÖÆ±³¾°
+    // 1. ç»˜åˆ¶èƒŒæ™¯
     setbkcolor(RGB(120, 200, 120));
     cleardevice();
 
-    // 2. »æÖÆµØÍ¼Íø¸ñ
-    // »æÖÆ¸ñ×Ó±³¾°
+    // 2. ç»˜åˆ¶åœ°å›¾ç½‘æ ¼
+    // ç»˜åˆ¶æ ¼å­èƒŒæ™¯
     setfillcolor(RGB(140, 210, 140));
     for (int r = 0; r < MAP_ROWS; r++) {
         for (int c = 0; c < MAP_COLS; c++) {
@@ -70,51 +70,51 @@ void LevelScene::drawTick() {
             fillrectangle(x, y, x + GRID_W, y + GRID_H);
         }
     }
-    // »æÖÆÍø¸ñÏß
+    // ç»˜åˆ¶ç½‘æ ¼çº¿
     setlinecolor(BLACK);
-    for (int c = 0; c <= MAP_COLS; c++) { // ÊúÏß
+    for (int c = 0; c <= MAP_COLS; c++) { // ç«–çº¿
         int x = MAP_X + c * GRID_W;
         line(x, MAP_Y, x, MAP_Y + MAP_ROWS * GRID_H);
     }
-    for (int r = 0; r <= MAP_ROWS; r++) { // ºáÏß
+    for (int r = 0; r <= MAP_ROWS; r++) { // æ¨ªçº¿
         int y = MAP_Y + r * GRID_H;
         line(MAP_X, y, MAP_X + MAP_COLS * GRID_W, y);
     }
 
-    // 3. »æÖÆ¿¨²Û
-    // ¿¨²Û±³¾°
+    // 3. ç»˜åˆ¶å¡æ§½
+    // å¡æ§½èƒŒæ™¯
     setfillcolor(RGB(60, 60, 60));
     fillrectangle(0, CARD_Y, 800, CARD_Y + CARD_H);
-    // »æÖÆÃ¿ÕÅ¿¨Æ¬
+    // ç»˜åˆ¶æ¯å¼ å¡ç‰‡
     for (int i = 0; i < cards.size(); i++) {
         const auto& card = cards[i];
         int x = CARD_X_START + i * (CARD_W + CARD_GAP);
-        int y = CARD_Y + (CARD_H - CARD_W) / 2; // ¾ÓÖĞ
+        int y = CARD_Y + (CARD_H - CARD_W) / 2; // å±…ä¸­
 
-        // ¿¨Æ¬±³¾°£¨Ñ¡ÖĞÊ±¸ßÁÁ£©
+        // å¡ç‰‡èƒŒæ™¯ï¼ˆé€‰ä¸­æ—¶é«˜äº®ï¼‰
         setfillcolor(selectedCard == card.type ? RGB(150, 255, 150) : RGB(100, 200, 100));
         fillrectangle(x, y, x + CARD_W, y + CARD_W);
         setlinecolor(BLACK);
         rectangle(x, y, x + CARD_W, y + CARD_W);
 
-        // ¿¨Æ¬ÎÄ×Ö£¨Ãû³Æ+³É±¾£©
+        // å¡ç‰‡æ–‡å­—ï¼ˆåç§°+æˆæœ¬ï¼‰
         settextcolor(WHITE);
-        settextstyle(12, 0, _T("ËÎÌå"));
+        settextstyle(12, 0, _T("å®‹ä½“"));
         outtextxy(x + 5, y + 5, card.name.c_str());
-        // Ñô¹â³É±¾
+        // é˜³å…‰æˆæœ¬
         settextcolor(YELLOW);
         char cost[10];
         sprintf_s(cost, "%d", card.cost);
         outtextxy(x + 5, y + CARD_W - 20, cost);
 
-        // ÀäÈ´ÕÚÕÖ£¨Èç¹ûÔÚÀäÈ´ÖĞ£©
+        // å†·å´é®ç½©ï¼ˆå¦‚æœåœ¨å†·å´ä¸­ï¼‰
         if (card.currentCd > 0) {
-            setfillcolor(RGB(100, 100, 100, 128)); // °ëÍ¸Ã÷»ÒÉ«
+            setfillcolor(RGB(100, 100, 100, 128)); // åŠé€æ˜ç°è‰²
             fillrectangle(x, y, x + CARD_W, y + CARD_W);
         }
     }
 
-    // 4. »æÖÆÖ²ÎïºÍ½©Ê¬£¨Ô­ÓĞÂß¼­£©
+    // 4. ç»˜åˆ¶æ¤ç‰©å’Œåƒµå°¸ï¼ˆåŸæœ‰é€»è¾‘ï¼‰
     auto plants = objMgr.GetObjectsByType("Plant");
     for (Object* obj : plants) {
         Plant* p = dynamic_cast<Plant*>(obj);
@@ -126,60 +126,60 @@ void LevelScene::drawTick() {
         if (z) z->draw();
     }
 
-    // 5. »æÖÆÑô¹âÊıÁ¿
+    // 5. ç»˜åˆ¶é˜³å…‰æ•°é‡
     settextcolor(YELLOW);
-    settextstyle(20, 0, _T("ËÎÌå"));
+    settextstyle(20, 0, _T("å®‹ä½“"));
     char sunText[20];
-    sprintf_s(sunText, "Ñô¹â£º%d", sunshine);
+    sprintf_s(sunText, "é˜³å…‰ï¼š%d", sunshine);
     outtextxy(10, 10, sunText);
 }
 
-// ´¦ÀíÊäÈë£¨µã»÷¿¨²ÛÑ¡Ö²Îï¡¢µã»÷µØÍ¼ÖÖÖ²Îï£©
+// å¤„ç†è¾“å…¥ï¼ˆç‚¹å‡»å¡æ§½é€‰æ¤ç‰©ã€ç‚¹å‡»åœ°å›¾ç§æ¤ç‰©ï¼‰
 void LevelScene::handleInput(ExMessage& msg) {
-    // Êó±ê×ó¼üµã»÷
+    // é¼ æ ‡å·¦é”®ç‚¹å‡»
     if (msg.message == WM_LBUTTONDOWN) {
         int x = msg.x;
         int y = msg.y;
 
-        // ¼ì²éÊÇ·ñµã»÷¿¨²Û£¨Ñ¡ÖĞÖ²Îï£©
+        // æ£€æŸ¥æ˜¯å¦ç‚¹å‡»å¡æ§½ï¼ˆé€‰ä¸­æ¤ç‰©ï¼‰
         if (y >= CARD_Y && y <= CARD_Y + CARD_H) {
             for (int i = 0; i < cards.size(); i++) {
                 const auto& card = cards[i];
                 int cardX = CARD_X_START + i * (CARD_W + CARD_GAP);
-                // ÅĞ¶Ïµã»÷ÊÇ·ñÔÚµ±Ç°¿¨Æ¬·¶Î§ÄÚ
+                // åˆ¤æ–­ç‚¹å‡»æ˜¯å¦åœ¨å½“å‰å¡ç‰‡èŒƒå›´å†…
                 if (x >= cardX && x <= cardX + CARD_W &&
                     y >= CARD_Y + (CARD_H - CARD_W) / 2 && y <= CARD_Y + (CARD_H - CARD_W) / 2 + CARD_W) {
-                    // ÀäÈ´½áÊøÇÒÑô¹â×ã¹»Ê±²ÅÄÜÑ¡ÖĞ
+                    // å†·å´ç»“æŸä¸”é˜³å…‰è¶³å¤Ÿæ—¶æ‰èƒ½é€‰ä¸­
                     if (card.currentCd <= 0 && sunshine >= card.cost) {
-                        selectedCard = card.type; // Ñ¡ÖĞµ±Ç°¿¨Æ¬
+                        selectedCard = card.type; // é€‰ä¸­å½“å‰å¡ç‰‡
                     }
                     break;
                 }
             }
         }
-        // ¼ì²éÊÇ·ñµã»÷µØÍ¼£¨ÖÖÖ²Ö²Îï£©
+        // æ£€æŸ¥æ˜¯å¦ç‚¹å‡»åœ°å›¾ï¼ˆç§æ¤æ¤ç‰©ï¼‰
         else if (x >= MAP_X && x <= MAP_X + MAP_COLS * GRID_W &&
             y >= MAP_Y && y <= MAP_Y + MAP_ROWS * GRID_H &&
             !selectedCard.empty()) {
-            // ¼ÆËãµã»÷µÄ¸ñ×ÓĞĞºÍÁĞ
+            // è®¡ç®—ç‚¹å‡»çš„æ ¼å­è¡Œå’Œåˆ—
             int col = (x - MAP_X) / GRID_W;
             int row = (y - MAP_Y) / GRID_H;
-            // ÖÖÖ²Ö²Îï£¨µ÷ÓÃÔ­ÓĞÖÖÖ²Âß¼­£©
+            // ç§æ¤æ¤ç‰©ï¼ˆè°ƒç”¨åŸæœ‰ç§æ¤é€»è¾‘ï¼‰
             if (PlantOnGrid(row, col, selectedCard)) {
-                // ÖÖÖ²³É¹¦ºó£¬´¥·¢¿¨²ÛÀäÈ´
+                // ç§æ¤æˆåŠŸåï¼Œè§¦å‘å¡æ§½å†·å´
                 for (auto& card : cards) {
                     if (card.type == selectedCard) {
-                        card.currentCd = card.cd; // ÖØÖÃÀäÈ´
+                        card.currentCd = card.cd; // é‡ç½®å†·å´
                         break;
                     }
                 }
-                selectedCard = ""; // È¡ÏûÑ¡ÖĞ
+                selectedCard = ""; // å–æ¶ˆé€‰ä¸­
             }
         }
     }
 }
 
-// Éú³É½©Ê¬£¨Ô­ÓĞÂß¼­£©
+// ç”Ÿæˆåƒµå°¸ï¼ˆåŸæœ‰é€»è¾‘ï¼‰
 void LevelScene::SpawnZombie(int row) {
     auto zombie = objMgr.CreateObject<NormalZombie>(
         "Zombie", "NormalZombie", 1.0f, 100, 10, 2.0f
@@ -189,13 +189,13 @@ void LevelScene::SpawnZombie(int row) {
     }
 }
 
-// ÖÖÖ²Ö²Îï£¨Ô­ÓĞÂß¼­£¬ÊÊÅä¿¨²ÛÑ¡ÖĞ£©
+// ç§æ¤æ¤ç‰©ï¼ˆåŸæœ‰é€»è¾‘ï¼Œé€‚é…å¡æ§½é€‰ä¸­ï¼‰
 bool LevelScene::PlantOnGrid(int row, int col, const std::string& plantType) {
     if (row < 0 || row >= MAP_ROWS || col < 0 || col >= MAP_COLS) return false;
     Grid& targetGrid = grid[row][col];
     if (!targetGrid.canPlant || targetGrid.plant != nullptr) return false;
 
-    // ¸ù¾İÑ¡ÖĞµÄÖ²ÎïÀàĞÍ´´½¨¶ÔÓ¦Ö²Îï
+    // æ ¹æ®é€‰ä¸­çš„æ¤ç‰©ç±»å‹åˆ›å»ºå¯¹åº”æ¤ç‰©
     Plant* plant = nullptr;
     if (plantType == "Peashooter") {
         if (sunshine < 100) return false;
@@ -211,7 +211,7 @@ bool LevelScene::PlantOnGrid(int row, int col, const std::string& plantType) {
     }
     if (!plant) return false;
 
-    // ÉèÖÃÖ²ÎïÎ»ÖÃºÍÍø¸ñ×´Ì¬
+    // è®¾ç½®æ¤ç‰©ä½ç½®å’Œç½‘æ ¼çŠ¶æ€
     plant->GetTransform()->SetPosition(
         MAP_X + col * GRID_W + GRID_W / 2,
         MAP_Y + row * GRID_H + GRID_H / 2
