@@ -1,66 +1,66 @@
 // LevelScene.h
 #ifndef LEVELSCENE_H
 #define LEVELSCENE_H
-#include "Scene.h"
+#include "scene.h"
 #include "ObjectManager.h"
 #include "Plant.h"
-#include "Zombie.h"
+#include "zombie.h"
 #include <vector>
 #include <string>
 
-// µØÍ¼ºÍ¿¨²Û³£Á¿£¨Óëmain.cppÆÁÄ»³ß´çÆ¥Åä£©
+// åœ°å›¾å’Œå¡æ§½å¸¸é‡ï¼ˆä¸main.cppå±å¹•å°ºå¯¸åŒ¹é…ï¼‰
 const int MAP_ROWS = 5;
 const int MAP_COLS = 9;
-const int GRID_W = 80;   // ¸ñ×Ó¿í¶È
-const int GRID_H = 100;  // ¸ñ×Ó¸ß¶È
-const int CARD_H = 80;   // ¿¨²Û¸ß¶È
-const int CARD_W = 60;   // µ¥ÕÅ¿¨Æ¬¿í¶È
-const int CARD_GAP = 10; // ¿¨Æ¬¼ä¾à
-const int CARD_Y = 20;  // ¿¨²Û¶¥²¿Y
-const int CARD_X_START = 30; // µÚÒ»ÕÅ¿¨Æ¬X
-const int MAP_X = 50;    // µØÍ¼×óÉÏ½ÇX
-const int MAP_Y = CARD_Y + CARD_H + 20;    // µØÍ¼×óÉÏ½ÇY
+const int GRID_W = 80;   // æ ¼å­å®½åº¦
+const int GRID_H = 100;  // æ ¼å­é«˜åº¦
+const int CARD_H = 80;   // å¡æ§½é«˜åº¦
+const int CARD_W = 60;   // å•å¼ å¡ç‰‡å®½åº¦
+const int CARD_GAP = 10; // å¡ç‰‡é—´è·
+const int CARD_Y = 20;  // å¡æ§½é¡¶éƒ¨Y
+const int CARD_X_START = 30; // ç¬¬ä¸€å¼ å¡ç‰‡X
+const int MAP_X = 50;    // åœ°å›¾å·¦ä¸Šè§’X
+const int MAP_Y = CARD_Y + CARD_H + 20;    // åœ°å›¾å·¦ä¸Šè§’Y
 
 
 
 
-// µØÍ¼¸ñ×Ó×´Ì¬£¨ÊÇ·ñ¿ÉÖÖÖ²£©
+// åœ°å›¾æ ¼å­çŠ¶æ€ï¼ˆæ˜¯å¦å¯ç§æ¤ï¼‰
 struct Grid {
-    bool canPlant = true; // Ä¬ÈÏ¿ÉÖÖÖ²
-    Plant* plant = nullptr; // ¸ñ×ÓÉÏµÄÖ²Îï£¨ nullptr±íÊ¾ÎŞ£©
+    bool canPlant = true; // é»˜è®¤å¯ç§æ¤
+    Plant* plant = nullptr; // æ ¼å­ä¸Šçš„æ¤ç‰©ï¼ˆ nullptrè¡¨ç¤ºæ— ï¼‰
 };
 
-// ¿¨²ÛÖ²ÎïĞÅÏ¢
+// å¡æ§½æ¤ç‰©ä¿¡æ¯
 struct Card {
-    std::string name; // Ö²ÎïÃû³Æ£¨Èç"Íã¶¹ÉäÊÖ"£©
-    std::string type; // Ö²ÎïÀàĞÍ£¨Èç"Peashooter"£©
-    int cost; // Ñô¹â³É±¾
-    float cd; // ÀäÈ´Ê±¼ä£¨Ãë£©
-    float currentCd; // µ±Ç°ÀäÈ´Ê£ÓàÊ±¼ä
+    std::string name; // æ¤ç‰©åç§°ï¼ˆå¦‚"è±Œè±†å°„æ‰‹"ï¼‰
+    std::string type; // æ¤ç‰©ç±»å‹ï¼ˆå¦‚"Peashooter"ï¼‰
+    int cost; // é˜³å…‰æˆæœ¬
+    float cd; // å†·å´æ—¶é—´ï¼ˆç§’ï¼‰
+    float currentCd; // å½“å‰å†·å´å‰©ä½™æ—¶é—´
 };
 
 class LevelScene : public Scene {
 private:
-    ObjectManager objMgr; // ¶ÔÏó¹ÜÀíÆ÷£¨Ö²Îï/½©Ê¬£©
-    int sunshine = 100; // ³õÊ¼Ñô¹â
-    float zombieSpawnTimer = 0; // ½©Ê¬Éú³É¼ÆÊ±Æ÷
+    ObjectManager objMgr; // å¯¹è±¡ç®¡ç†å™¨ï¼ˆæ¤ç‰©/åƒµå°¸ï¼‰
+    int sunshine = 100; // åˆå§‹é˜³å…‰
+    float zombieSpawnTimer = 0; // åƒµå°¸ç”Ÿæˆè®¡æ—¶å™¨
 
-    // ĞÂÔö£ºµØÍ¼ºÍ¿¨²ÛÏà¹Ø
-    std::vector<std::vector<Grid>> grid; // 5ĞĞ9ÁĞµØÍ¼Íø¸ñ
-    std::vector<Card> cards; // ¿¨²ÛÖ²ÎïÁĞ±í
-    std::string selectedCard; // µ±Ç°Ñ¡ÖĞµÄ¿¨²ÛÖ²Îï£¨¿Õ±íÊ¾Î´Ñ¡ÖĞ£©
+    // æ–°å¢ï¼šåœ°å›¾å’Œå¡æ§½ç›¸å…³
+    std::vector<std::vector<Grid>> grid; // 5è¡Œ9åˆ—åœ°å›¾ç½‘æ ¼
+    std::vector<Card> cards; // å¡æ§½æ¤ç‰©åˆ—è¡¨
+    std::string selectedCard; // å½“å‰é€‰ä¸­çš„å¡æ§½æ¤ç‰©ï¼ˆç©ºè¡¨ç¤ºæœªé€‰ä¸­ï¼‰
 
 public:
     LevelScene(std::string name);
-    void onEnter() override; // ³¡¾°½øÈëÊ±³õÊ¼»¯
-    void onExit() override;  // ³¡¾°ÍË³öÊ±ÇåÀí
-    void eventTick(float dt) override; // Âß¼­¸üĞÂ
-    void drawTick() override; // »æÖÆ
-    void handleInput(ExMessage& msg); // ´¦ÀíÊäÈë£¨ĞÂÔö£©
+    void onEnter() override; // åœºæ™¯è¿›å…¥æ—¶åˆå§‹åŒ–
+    void onExit() override;  // åœºæ™¯é€€å‡ºæ—¶æ¸…ç†
+    void eventTick(float dt) override; // é€»è¾‘æ›´æ–°
+    void drawTick() override; // ç»˜åˆ¶
+    void handleInput(ExMessage& msg); // å¤„ç†è¾“å…¥ï¼ˆæ–°å¢ï¼‰
 
-    // ¸¨Öú·½·¨
-    void SpawnZombie(int row); // Éú³É½©Ê¬
-    bool PlantOnGrid(int row, int col, const std::string& plantType); // ÖÖÖ²Ö²Îï
-    void AddSunshine(int amount) { sunshine += amount; } // Ôö¼ÓÑô¹â
+    // è¾…åŠ©æ–¹æ³•
+    void SpawnZombie(int row); // ç”Ÿæˆåƒµå°¸
+    bool PlantOnGrid(int row, int col, const std::string& plantType); // ç§æ¤æ¤ç‰©
+    void AddSunshine(int amount) { sunshine += amount; } // å¢åŠ é˜³å…‰
 };
 #endif

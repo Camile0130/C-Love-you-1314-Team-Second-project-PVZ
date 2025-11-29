@@ -1,5 +1,5 @@
 #define _WIN32_WINNT 0x0600
-#include "Scene.h"
+#include "scene.h"
 #include "LevelScene.h"
 #include "ObjectManager.h"
 #include "Peashooter.h"
@@ -8,33 +8,33 @@
 #include <iostream>
 
 int main() {
-    // 1. ³õÊ¼»¯Í¼ĞÎ»·¾³
+    // 1. åˆå§‹åŒ–å›¾å½¢ç¯å¢ƒ
     initgraph(800, 600);
-    setbkcolor(RGB(100, 180, 100)); // ÉèÖÃ±³¾°É«
+    setbkcolor(RGB(100, 180, 100)); // è®¾ç½®èƒŒæ™¯è‰²
     cleardevice();
 
     BeginBatchDraw();
 
-    // 2. ¶¨Òå³¡¾°×´Ì¬£¨²Ëµ¥/¹Ø¿¨£©
+    // 2. å®šä¹‰åœºæ™¯çŠ¶æ€ï¼ˆèœå•/å…³å¡ï¼‰
     enum class GameState { MENU, LEVEL, EXIT };
     GameState currentState = GameState::MENU;
 
-    // 3. ³¡¾°ÊµÀı»¯
+    // 3. åœºæ™¯å®ä¾‹åŒ–
     Scene menuScene("MENU");
-    LevelScene levelScene("Level1"); // ¹Ø¿¨³¡¾°
+    LevelScene levelScene("Level1"); // å…³å¡åœºæ™¯
 
-    // 4. Ê±¼ä±äÁ¿
+    // 4. æ—¶é—´å˜é‡
     ULONGLONG lastTime = GetTickCount64();
     ExMessage msg;
 
-    // Ö÷Ñ­»·
+    // ä¸»å¾ªç¯
     while (currentState != GameState::EXIT) {
-        // ¼ÆËãÖ¡Ê±¼ä²îdt£¨Ãë£©
+        // è®¡ç®—å¸§æ—¶é—´å·®dtï¼ˆç§’ï¼‰
         ULONGLONG currentTime = GetTickCount64();
         float dt = (currentTime - lastTime) / 1000.0f;
         lastTime = currentTime;
 
-        // ========== ´¦ÀíÊäÈë ==========
+        // ========== å¤„ç†è¾“å…¥ ==========
         while (peekmessage(&msg)) {
             if (msg.message == WM_QUIT || msg.vkcode == VK_ESCAPE) {
                 currentState = GameState::EXIT;
@@ -43,16 +43,16 @@ int main() {
 
             switch (currentState) {
             case GameState::MENU:
-                // ²Ëµ¥Âß¼­£º°´»Ø³µ¼ü½øÈë¹Ø¿¨
+                // èœå•é€»è¾‘ï¼šæŒ‰å›è½¦é”®è¿›å…¥å…³å¡
                 if (msg.message == WM_KEYDOWN && msg.vkcode == VK_RETURN) {
                     currentState = GameState::LEVEL;
-                    levelScene.onEnter(); // ³õÊ¼»¯¹Ø¿¨£¨´´½¨Ö²Îï/½©Ê¬£©
-                    cleardevice(); // ÇåÆÁÇĞ»»³¡¾°
+                    levelScene.onEnter(); // åˆå§‹åŒ–å…³å¡ï¼ˆåˆ›å»ºæ¤ç‰©/åƒµå°¸ï¼‰
+                    cleardevice(); // æ¸…å±åˆ‡æ¢åœºæ™¯
                 }
                 break;
 
             case GameState::LEVEL:
-                levelScene.handleInput(msg); // ¹Ø¿¨ÊäÈë£¨ÈçÔİÍ£¡¢·ÅÖÃÖ²Îï£©
+                levelScene.handleInput(msg); // å…³å¡è¾“å…¥ï¼ˆå¦‚æš‚åœã€æ”¾ç½®æ¤ç‰©ï¼‰
                 break;
 
             default:
@@ -60,23 +60,23 @@ int main() {
             }
         }
 
-        // ========== ¸üĞÂ+»æÖÆÂß¼­ ==========
+        // ========== æ›´æ–°+ç»˜åˆ¶é€»è¾‘ ==========
         switch (currentState) {
         case GameState::MENU:
-            // »æÖÆ²Ëµ¥½çÃæ
+            // ç»˜åˆ¶èœå•ç•Œé¢
             menuScene.drawTick();
             settextcolor(WHITE);
-            settextstyle(40, 0, _T("ºÚÌå"));
-            outtextxy(200, 200, _T("Ö²Îï´óÕ½½©Ê¬ - ²Ëµ¥"));
-            settextstyle(20, 0, _T("ËÎÌå"));
-            outtextxy(250, 300, _T("°´»Ø³µ¼ü¿ªÊ¼ÓÎÏ·"));
-            outtextxy(250, 350, _T("°´ESCÍË³öÓÎÏ·"));
+            settextstyle(40, 0, _T("é»‘ä½“"));
+            outtextxy(200, 200, _T("æ¤ç‰©å¤§æˆ˜åƒµå°¸ - èœå•"));
+            settextstyle(20, 0, _T("å®‹ä½“"));
+            outtextxy(250, 300, _T("æŒ‰å›è½¦é”®å¼€å§‹æ¸¸æˆ"));
+            outtextxy(250, 350, _T("æŒ‰ESCé€€å‡ºæ¸¸æˆ"));
             break;
 
         case GameState::LEVEL:
-            // ¹Ø¿¨¸üĞÂ+»æÖÆ
-            levelScene.eventTick(dt); // ¸üĞÂÓÎÏ·Âß¼­£¨Ö²Îï¹¥»÷/½©Ê¬ÒÆ¶¯£©
-            levelScene.drawTick();    // »æÖÆ³¡¾°£¨±³¾°/Ö²Îï/½©Ê¬£©
+            // å…³å¡æ›´æ–°+ç»˜åˆ¶
+            levelScene.eventTick(dt); // æ›´æ–°æ¸¸æˆé€»è¾‘ï¼ˆæ¤ç‰©æ”»å‡»/åƒµå°¸ç§»åŠ¨ï¼‰
+            levelScene.drawTick();    // ç»˜åˆ¶åœºæ™¯ï¼ˆèƒŒæ™¯/æ¤ç‰©/åƒµå°¸ï¼‰
             break;
 
         default:
@@ -85,14 +85,14 @@ int main() {
 
         FlushBatchDraw();
 
-        // ¿ØÖÆFPS£¨Ô¼60Ö¡£©
+        // æ§åˆ¶FPSï¼ˆçº¦60å¸§ï¼‰
         Sleep(16);
     }
 
-    // 5. ÇåÀí×ÊÔ´
+    // 5. æ¸…ç†èµ„æº
     levelScene.onExit();
     EndBatchDraw();
     closegraph();
-    std::cout << "ÓÎÏ·ÍË³ö" << std::endl;
+    std::cout << "æ¸¸æˆé€€å‡º" << std::endl;
     return 0;
 }
